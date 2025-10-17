@@ -130,19 +130,27 @@ function App() {
     }
   }
 
-  function handleFinish() {
-    if (!supplier) return alert('Chưa chọn nhà cung cấp');
+function handleFinish() {
+  if (!supplier) return alert('Chưa chọn nhà cung cấp');
 
-    const enteredSaved = currentSeq - 1;
-    const entered = enteredSaved + (hasWeight ? 1 : 0);
-    const total = Number(supplier.total || 0);
+  const total = Number(supplier.total || 0);
+  let entered = currentSeq;
 
+  if (!hasWeight) entered -= 1;
+
+  // Nếu chưa tick đồng ý thì không được kết thúc
+  if (!record.agreeFinish) {
+    // Nếu chưa đủ số lượng và chưa đồng ý => cảnh báo như cũ
     if (entered < total) {
       return alert(`Chưa nhập đủ số lượng cá: đã nhập ${entered}/${total}.`);
     }
-    if (!record.agreeFinish) return alert('Bạn cần tích "Tôi đồng ý kết thúc" trước khi kết thúc.');
-    alert('Kết thúc thành công');
+    return alert('Kết thúc thành công');
   }
+
+  // Nếu đã tick đồng ý thì cho phép kết thúc luôn (bỏ qua kiểm tra số lượng)
+  alert('Kết thúc thành công');
+}
+
 
   return (
     <div className="app-root">
